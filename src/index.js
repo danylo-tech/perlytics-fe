@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import MobileApp from './MobileApp';
 import Domain from './Domain';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
+import GoogleAuth from './GoogleAuth';
 
 const routing = (
   <Router>
@@ -18,14 +19,14 @@ const routing = (
           <Link to="/app/1">App</Link>
         </li>
       </ul>
+      <GoogleAuth />
       <Route exact path="/" component={App} />
       <Route path="/app/:id" component={MobileApp} />
       <Route path="/domain/:id" component={Domain} />
     </div>
   </Router>
-)
+);
 ReactDOM.render(routing, document.getElementById('root'));
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
