@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import GoogleButton from 'react-google-button';
+import Axios from 'axios';
 
 import './style.css';
 
@@ -20,8 +21,16 @@ class GoogleAuth extends Component {
     this.setState({ isSigned: false, userInfo: null });
   };
 
-  handleLoginSuccess = e => {
+  handleLoginSuccess = async e => {
     this.setState({ isSigned: true, userInfo: e.profileObj });
+
+    this.props.updateUserInfo(e.profileObj);
+
+    await Axios.post(`http://youta-api.ngrok.io/api-user/`, { ...e.profileObj, accessToken: e.accessToken }).then(
+      res => {
+        console.log(`/api-user/`, res.data);
+      },
+    );
   };
 
   handleLoginFailed = e => {
@@ -66,11 +75,12 @@ class GoogleAuth extends Component {
               render={renderProps => {
                 return <GoogleButton onClick={renderProps.onClick} disabled={renderProps.disabled} />;
               }}
+              scope="https://www.googleapis.com/auth/calendar"
               buttonText="SignIn With Google"
               onSuccess={this.handleLoginSuccess}
               onFailure={this.handleLoginFailed}
               cookiePolicy={'single_host_origin'}
-              redirectUri="http://localhost:3000"
+              // redirectUri="http://localhost:3000"
             />
           </div>
         )}
